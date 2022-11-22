@@ -2,6 +2,7 @@ import fs from "fs-extra";
 import path from "path";
 import { v4 as uuidv4 } from 'uuid';
 import wkhtmltopdf from "wkhtmltopdf";
+import puppeteer from 'puppeteer-core';
 import config, { ROOT_PATH } from '@/config';
 
 interface Options {
@@ -11,8 +12,51 @@ interface Options {
   chromeOptions: any;
 }
 
+let CHROMIUM_BROWSER
+const createChromium = async () => {
+  if (CHROMIUM_BROWSER) {
+    return CHROMIUM_BROWSER
+  }
+  CHROMIUM_BROWSER = await puppeteer.launch({
+    ignoreHTTPSErrors: true,
+    headless: true,
+    executablePath: config.GOOGLE_CHROME_BIN_PATH,
+    defaultViewport: {
+      width: 550,
+      height: 550
+    },
+    args: [
+      '--disable-background-networking',
+      '--disable-background-timer-throttling',
+      '--disable-client-side-phishing-detection',
+      '--disable-default-apps',
+      '--disable-extensions',
+      '--disable-hang-monitor',
+      '--disable-popup-blocking',
+      '--disable-prompt-on-repost',
+      '--disable-sync',
+      '--disable-translate',
+      '--disable-gpu',
+      '--metrics-recording-only',
+      '--no-first-run',
+      '--safebrowsing-disable-auto-update',
+      '--no-sandbox',
+      '--hide-scrollbars',
+      // '--default-background-color=00000000',    // 透明背景
+    ]
+  })
+
+  CHROMIUM_BROWSER.on('disconnected', () => {
+    console.log('chromium disconnected')
+    CHROMIUM_BROWSER = null
+  })
+
+  return CHROMIUM_BROWSER
+}
+
 const convertor = {
   wkhtmltopdf (options: Options, output: string): Promise<void> {
+    // https://wkhtmltopdf.org/usage/wkhtmltopdf.txt
     return new Promise((resolve, reject) => {
       let content = options.url
       let htmlFile
@@ -44,7 +88,24 @@ const convertor = {
 
   },
   async chrome (options: Options, output: string) {
+    // https://pptr.dev/api
+    await createChromium()
+    const page = await CHROMIUM_BROWSER.newPage()
+    if (options.url) {
+      await page.goto(options.url);
+    } else {
+      if (config.NODE_ENV === 'development') {
+        fs.writeFile(`${output}.html`, options.html)
+      }
+      await page.evaluate(`document.body.innerHTML = ${JSON.stringify(options.html)}`)
+    }
 
+    await page.pdf({
+      ...options.chromeOptions,
+      path: output,
+    })
+
+    await page.close()
   },
 }
 
