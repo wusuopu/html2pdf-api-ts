@@ -1,0 +1,33 @@
+FROM node:16.13.2-buster-slim
+
+# install chrome and tini
+RUN apt-get update && apt-get install -y apt-transport-https ca-certificates && \
+    echo deb https://mirrors.tuna.tsinghua.edu.cn/debian/ buster main contrib non-free > /etc/apt/sources.list && \
+    echo deb https://mirrors.tuna.tsinghua.edu.cn/debian/ buster-updates main contrib non-free >> /etc/apt/sources.list && \
+    echo deb https://mirrors.tuna.tsinghua.edu.cn/debian/ buster-backports main contrib non-free >> /etc/apt/sources.list && \
+    echo deb https://mirrors.tuna.tsinghua.edu.cn/debian-security buster/updates main contrib non-free >> /etc/apt/sources.list && \
+    apt-get update && apt-get install -y wget gnupg && \
+    wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+    echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list && \
+    apt-get update && apt-get install -y google-chrome-stable && \
+    wget https://github.com/krallin/tini/releases/download/v0.19.0/tini -O /tini && chmod +x /tini
+
+COPY ./app/package.json ./app/yarn.lock /app/
+RUN cd /app && yarn install && rm -rf /root/.cache /root/.npm /usr/local/share/.cache/yarn/
+
+# 安装中文字体
+COPY ./fonts/ /usr/share/fonts
+
+COPY ./app/ /app
+WORKDIR /app
+
+RUN yarn build
+
+ENV NODE_ENV=production \
+    PORT=80 \
+    CONVERTOR=chrome \
+    GOOGLE_CHROME_BIN_PATH="/usr/bin/google-chrome"
+
+
+ENTRYPOINT ["/tini", "--"]
+CMD ["yarn", "start"]
