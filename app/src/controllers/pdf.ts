@@ -16,7 +16,7 @@ export default {
    *  chromeOptions Object;
    */
   async create (req: Request, res: Response) {
-    if (!validator.isURL(req.body.url) && !req.body.html) {
+    if (!req.body.html && (!req.body.url || !validator.isURL(req.body.url))) {
       return res.status(400).json({errors: ['缺少 url 或者 html 参数'], success: false});
     }
 
