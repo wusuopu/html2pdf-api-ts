@@ -16,7 +16,7 @@
   wkhtmltopdfOptions: object;(选填)
     wkhtmltopdf 的额外参数，使用小驼峰形式；参考： https://wkhtmltopdf.org/usage/wkhtmltopdf.txt
   chromeOptions: object;(选填)
-    生成 pdf 时的一些配置；参考： https://pptr.dev/api
+    生成 pdf 时的一些配置；参考： https://pptr.dev/api/puppeteer.pdfoptions
 
 返回：
   执行成功则返回 200 状态码和 pdf 文件的二进制内容。
