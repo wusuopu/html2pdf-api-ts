@@ -85,27 +85,30 @@ const convertor = {
         resolve()
       })
     })
-
   },
   async chrome (options: Options, output: string) {
     // https://pptr.dev/api
     await createChromium()
     const page = await CHROMIUM_BROWSER.newPage()
+    let htmlFile
     if (options.url) {
       await page.goto(options.url);
     } else {
-      if (config.NODE_ENV === 'development') {
-        fs.writeFile(`${output}.html`, options.html)
-      }
-      await page.evaluate(`document.body.innerHTML = ${JSON.stringify(options.html)}`)
+      htmlFile = `${output}.html`
+      await fs.writeFile(htmlFile, options.html)
+      await page.goto(`file://${htmlFile}`);
+      // await page.evaluate(`document.body.innerHTML = ${JSON.stringify(options.html)}`)
     }
 
     await page.pdf({
       ...options.chromeOptions,
       path: output,
     })
-
     await page.close()
+    if (config.NODE_ENV === 'production' && htmlFile) {
+      // 删除生成的文件
+      fs.unlink(htmlFile)
+    }
   },
 }
 
