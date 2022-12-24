@@ -26,7 +26,8 @@ RUN yarn build
 ENV NODE_ENV=production \
     PORT=80 \
     CONVERTOR=chrome \
-    GOOGLE_CHROME_BIN_PATH="/usr/bin/google-chrome"
+    GOOGLE_CHROME_BIN_PATH="/usr/bin/google-chrome" \
+    MAX_CONVERT_LIMIT=""
 
 
 ENTRYPOINT ["/tini", "--"]

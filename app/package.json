@@ -1,5 +1,6 @@
 {
-  "name": "sms-code-api-ts",
+  "name": "html2pdf-api-ts",
+  "private":"true",
   "version": "0.0.0",
   "description": "TypeScript + Express API Server",
   "author": "",
@@ -36,8 +37,6 @@
     "wkhtmltopdf": "^0.4.0"
   },
   "devDependencies": {
-    "@swc/cli": "^0.1.57",
-    "@swc/core": "^1.2.220",
     "@types/express": "^4.17.13",
     "@types/jest": "^28.1.6",
     "@types/lodash": "^4.14.183",

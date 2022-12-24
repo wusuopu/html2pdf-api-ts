@@ -22,7 +22,8 @@ RUN yarn build
 
 ENV NODE_ENV=production \
     PORT=80 \
-    CONVERTOR=wkhtmltopdf
+    CONVERTOR=wkhtmltopdf \
+    MAX_CONVERT_LIMIT=""
 
 
 ENTRYPOINT ["/tini", "--"]

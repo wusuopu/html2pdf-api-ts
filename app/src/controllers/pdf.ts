@@ -6,6 +6,7 @@ import config from '@/config'
 import logger from '@/utils/logger';
 import pdf from '@/utils/pdf';
 
+let CONVERT_TIMES = 0
 export default {
   /**
    * POST /
@@ -46,6 +47,12 @@ export default {
       if (config.NODE_ENV === 'production') {
         // 删除生成的文件
         fs.unlink(file)
+        if (config.MAX_CONVERT_LIMIT) {     // 为避免内存泄漏，执行一定次数之后刚退出
+          CONVERT_TIMES++
+          if (CONVERT_TIMES > config.MAX_CONVERT_LIMIT) {
+            setTimeout(() => { process.exit(1) }, 10)
+          }
+        }
       }
     })
   },

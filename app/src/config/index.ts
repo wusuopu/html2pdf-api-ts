@@ -13,5 +13,6 @@ export const ROOT_PATH = path.resolve(process.cwd());
 const Config: any = _.pick(process.env, [
   'NODE_ENV', 'CONVERTOR', 'GOOGLE_CHROME_BIN_PATH', 'WKHTMLTOPDF_BIN_PATH',
 ]);
+Config.MAX_CONVERT_LIMIT = Number(process.env.MAX_CONVERT_LIMIT)
 
 export default Config;
