@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import path from "path";
 import fs from "fs-extra";
-import validator from 'validator';
 import config from '@/config'
 import logger from '@/utils/logger';
 import pdf from '@/utils/pdf';
@@ -17,7 +16,14 @@ export default {
    *  chromeOptions Object;
    */
   async create (req: Request, res: Response) {
-    if (!req.body.html && (!req.body.url || !validator.isURL(req.body.url))) {
+    let url
+    if (req.body.url) {
+      try {
+        url = new URL(req.body.url)
+      } catch (error) {
+      }
+    }
+    if (!req.body.html && (!url)) {
       return res.status(400).json({errors: ['缺少 url 或者 html 参数'], success: false});
     }
 

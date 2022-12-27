@@ -92,11 +92,11 @@ const convertor = {
     const page = await CHROMIUM_BROWSER.newPage()
     let htmlFile
     if (options.url) {
-      await page.goto(options.url);
+      await page.goto(options.url, { waitUntil: 'networkidle2' });
     } else {
       htmlFile = `${output}.html`
       await fs.writeFile(htmlFile, options.html)
-      await page.goto(`file://${htmlFile}`);
+      await page.goto(`file://${htmlFile}`, { waitUntil: 'networkidle2' });
       // await page.evaluate(`document.body.innerHTML = ${JSON.stringify(options.html)}`)
     }
 

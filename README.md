@@ -24,9 +24,9 @@
 
 ## 启动服务
 ### 使用 docker 启动
-使用 chrome 进行转换： `docker run -d -it -p 80 wusuopu/html2pdf-api-ts:v1.0.0-chrome`
+使用 chrome 进行转换： `docker run -d -it -p 80 wusuopu/html2pdf-api-ts:v1.1.0-chrome`
 
-使用 wkhtmltopdf 进行转换： `docker run -d -it -p 80 wusuopu/html2pdf-api-ts:v1.0.0-wkhtml2pdf`
+使用 wkhtmltopdf 进行转换： `docker run -d -it -p 80 wusuopu/html2pdf-api-ts:v1.1.0-wkhtml2pdf`
 
 
 ### 通过源码启动
