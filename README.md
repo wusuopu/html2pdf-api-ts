@@ -17,6 +17,8 @@
     wkhtmltopdf 的额外参数，使用小驼峰形式；参考： https://wkhtmltopdf.org/usage/wkhtmltopdf.txt
   chromeOptions: object;(选填)
     生成 pdf 时的一些配置；参考： https://pptr.dev/api/puppeteer.pdfoptions
+  convertor: wkhtmltopdf | chrome (选填)
+    选择要使用的转换工具
 
 返回：
   执行成功则返回 200 状态码和 pdf 文件的二进制内容。
@@ -24,9 +26,11 @@
 
 ## 启动服务
 ### 使用 docker 启动
-使用 chrome 进行转换： `docker run -d -it -p 80 wusuopu/html2pdf-api-ts:v1.2.0-chrome`
+使用 chrome 进行转换： `docker run -d -it -p 80 wusuopu/html2pdf-api-ts:v1.3.0-chrome`
 
-使用 wkhtmltopdf 进行转换： `docker run -d -it -p 80 wusuopu/html2pdf-api-ts:v1.2.0-wkhtml2pdf`
+使用 wkhtmltopdf 进行转换： `docker run -d -it -p 80 wusuopu/html2pdf-api-ts:v1.3.0-wkhtml2pdf`
+
+同时包含两种： `docker run -d -it -p 80 wusuopu/html2pdf-api-ts:v1.3.0-combine`
 
 
 ### 通过源码启动

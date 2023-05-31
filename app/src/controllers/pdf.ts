@@ -14,6 +14,7 @@ export default {
    *  html: string;
    *  wkhtmltopdfOptions: Object;
    *  chromeOptions Object;
+   *  convertor: string;
    */
   async create (req: Request, res: Response) {
     let url

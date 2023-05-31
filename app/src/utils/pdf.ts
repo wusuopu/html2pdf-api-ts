@@ -10,6 +10,7 @@ interface Options {
   html: string;
   wkhtmltopdfOptions: any;
   chromeOptions: any;
+  convertor?: string;
 }
 
 let CHROMIUM_BROWSER
@@ -117,7 +118,7 @@ export default {
     const outDir = path.join(ROOT_PATH, 'tmp/pdf')
     await fs.ensureDir(outDir)
     const filename = path.join(outDir, `${uuidv4()}.pdf`)
-    await (convertor[config.CONVERTOR] || convertor.wkhtmltopdf)(options, filename)
+    await (convertor[options.convertor || config.CONVERTOR] || convertor.wkhtmltopdf)(options, filename)
     return filename
   },
 }
